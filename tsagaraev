@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define stoka 20
+#define stolb 20
+
+void randPole(int pole[stoka][stolb]) {
+    for (int i = 0; i < stoka; i++) {
+        for (int j = 0; j < stolb; j++) {
+            pole[i][j] = rand() % 2;
+        }
+    }
+}
+void Pole(int pole[stoka][stolb]) {
+    for (int i = 0; i < stoka; i++) {
+        for (int j = 0; j < stolb; j++) {
+            if (pole[i][j] == 1) {
+                printf("[X]");
+            }
+            else {
+                printf("   ");
+            }
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+void newPole(int pole[stoka][stolb]) {
+    int newPole[stoka][stolb];
+    for (int i = 0; i < stoka; i++) {
+        for (int j = 0; j < stolb; j++) {
+            int mobs = 0;
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    int stroka = (i + x + stoka) % stoka;
+                    int stolbec = (j + y + stolb) % stolb;
+                    mobs += pole[stroka][stolbec];
+                }
+            }
+            mobs -= pole[i][j];
+
+            if ((pole[i][j] == 1) && (mobs < 2 || mobs > 3)) {
+                newPole[i][j] = 0;
+            }
+            else if (pole[i][j] == 0 && mobs == 3) {
+                newPole[i][j] = 1;
+            }
+            else {
+                newPole[i][j] = pole[i][j];
+            }
+        }
+    }
+    for (int i = 0; i < stoka; i++) {
+        for (int j = 0; j < stolb; j++) {
+            pole[i][j] = newPole[i][j];
+        }
+    }
+}
+int main() {
+    int pole[stoka][stolb];
+    randPole(pole);
+    for (int z = 0; z < 100; z++) {
+        printf("cikl %d:\n", z + 1);
+        Pole(pole);
+
+        newPole(pole);
+    }
+
+    return 0;
+}
